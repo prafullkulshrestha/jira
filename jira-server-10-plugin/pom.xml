@@ -82,18 +82,7 @@
         </dependency>
         <!-- Add dependency on jira-core if you want access to JIRA implementation classes as well as the sanctioned API. -->
         <!-- This is not normally recommended, but may be required eg when migrating a plugin originally developed against JIRA 4.x -->
-        <dependency>
-            <groupId>com.atlassian.jira</groupId>
-            <artifactId>jira-core</artifactId>
-            <version>9.12.0-QR-20230811014358</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/jndi/jndi -->
-        <dependency>
-            <groupId>jndi</groupId>
-            <artifactId>jndi</artifactId>
-            <version>1.2.1</version>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
