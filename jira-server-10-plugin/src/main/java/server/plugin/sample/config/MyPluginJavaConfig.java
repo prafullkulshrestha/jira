@@ -39,4 +39,5 @@ public class MyPluginJavaConfig {
             final MyPluginComponent mypluginComponent) {
         return exportOsgiService(mypluginComponent, null, MyPluginComponent.class);
     }
+
 }

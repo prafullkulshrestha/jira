@@ -28,7 +28,17 @@
   </web-item>  
   <web-item name="Atlassian Developers Site" i18n-name-key="atlassian-developers-site.name" key="atlassian-developers-site" section="my-item-link/my-section" weight="1000"> 
     <description key="atlassian-developers-site.description">The Atlassian Developers Site Plugin</description>  
-    <label key="atlassian-developers-site.label"></label>  
+    <label key="atlassian-developers-site.label"/>  
     <link linkId="atlassian-developers-site-link">http://developer.atlassian.com/docs</link> 
   </web-item>
+  <job-config name="My job" key="myJobId">
+    <job key="myJobRunner" perClusterJob="true" clusteredOnly="true"/>
+    <schedule cron-expression="0/2 * * * * ?" jitterSecs="2"/>
+    <managed editable="true" keepingHistory="true" canRunAdhoc="true" canDisable="true"/>
+  </job-config>
+
+  <component key="jtricksJob" class="server.plugin.sample.job.JTricksJobImpl" name="JTricksJob" i18n-name-key="j-tricks-job-impl.name">
+    <description key="j-tricks-job-impl.description">The J Tricks Job Impl Plugin</description>
+    <interface>server.plugin.sample.api.JTricksJob</interface>
+  </component>
 </atlassian-plugin>

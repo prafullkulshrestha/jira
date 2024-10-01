@@ -1,0 +1,11 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <!-- Test plugin starts in early startup phase, to ensure the scanner plugins are ready then -->
+        <startup>early</startup>
+    </plugin-info>
+
+
+</atlassian-plugin>

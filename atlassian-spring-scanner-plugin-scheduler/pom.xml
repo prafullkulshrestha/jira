@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.atlassian.plugin.spring.scanner.test</groupId>
+    <artifactId>atlassian-spring-scanner-plugin-scheduler</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>atlassian-plugin</packaging>
+
+    <name>Atlassian Spring Scanner Plugin Scheduler</name>
+
+    <properties>
+        <!-- 'mvn install/verify' runs tests in refapp by default -->
+        <testGroups>refapp</testGroups>
+
+        <!-- We only run one product at a time, so force them to have the same baseURL to make it easy to run tests from IDEA -->
+        <product.httpPort>5990</product.httpPort>
+        <product.contextPath>/product</product.contextPath>
+<!--        <project.version>9.12.2</project.version>-->
+        <jira.version>9.12.2</jira.version>
+        <refapp.version>6.5.23</refapp.version>
+        <amps.maven.plugin.version>9.0.4</amps.maven.plugin.version>
+        <scanner.version>3.0.3</scanner.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>geomajas</id>
+            <url>https://mvnrepository.com/repos/geomajas</url>
+        </repository>
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://maven.atlassian.com/repository/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>${project.artifactId}</id>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+        <repository>
+            <id>Laputa RELEASES</id>
+            <url>https://maven.laputa.veracode.io/api/object/releases</url>
+        </repository>
+        <repository>
+            <id>Laputa SNAPSHOT</id>
+            <url>https://maven.laputa.veracode.io/api/object/snapshots</url>
+        </repository>
+        <repository>
+            <id>Laputa Thirdparty</id>
+            <url>https://maven.laputa.veracode.io/api/object/thirdparty</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.atlassian.jira</groupId>
+                <artifactId>jira-project</artifactId>
+                <version>${jira.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-annotation</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-osgi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+       <!-- <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <!-- Product-specific deps for use in @JiraComponents, @ConfluenceComponents etc.
+             OSGi imports from these must be marked optional. -->
+
+        <dependency>
+            <groupId>com.atlassian.refapp</groupId>
+            <artifactId>refapp-api</artifactId>
+            <version>${refapp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+
+        <!--Test Deps-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.8.8</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.plugin</groupId>
+                <artifactId>atlassian-spring-scanner-maven-plugin</artifactId>
+                <version>3.0.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>atlassian-spring-scanner</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scannedDependencies>
+                        <dependency>
+                            <groupId>com.atlassian.plugin</groupId>
+                            <artifactId>atlassian-spring-scanner-test-example-external-jar</artifactId>
+                            <!--
+                                        For testing reasons we exclude the transitive dep (atlassian-spring-scanner-test-example-transitive-excluded-jar) but there
+                                        is another one (atlassian-spring-scanner-test-example-transitive-jar) in play.
+
+                                        We should see the @Components from atlassian-spring-scanner-test-example-transitive-jar
+                                        but not from atlassian-spring-scanner-test-example-transitive-excluded-jar
+                               -->
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>com.atlassian.plugin</groupId>
+                                    <artifactId>atlassian-spring-scanner-test-example-transitive-excluded-jar</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                    </scannedDependencies>
+                    <verbose>true</verbose>
+                    <!-- We are explicitly scanning an external JAR above for this test case, which will
+                         never happen in real life but which is apparently needed to test the transitive
+                         deps, so we permit duplicate imports here.
+                      -->
+                    <permitDuplicateImports>true</permitDuplicateImports>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>amps-maven-plugin</artifactId>
+                <version>${amps.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <extractDependencies>false</extractDependencies>
+                    <jvmDebugSuspend>true</jvmDebugSuspend>
+                    <systemPropertyVariables>
+                        <!-- Suppress UPM's irrelevant stack traces -->
+                        <upm.pac.disable>true</upm.pac.disable>
+                    </systemPropertyVariables>
+                    <instructions>
+                        <Atlassian-Plugin-Key>${project.groupId}.${project.artifactId}</Atlassian-Plugin-Key>
+                        <Spring-Context>*</Spring-Context>
+                        <Export-Package>
+                        </Export-Package>
+                        <Import-Package>
+                            <!-- For use of @ModuleType -->
+                            com.atlassian.plugin.osgi.bridge.external,
+                            <!-- For RefappImports -->
+                            com.atlassian.refapp.*;resolution:="optional",
+                            <!-- For JiraImports-->
+                            com.atlassian.jira.*;resolution:="optional",
+                            <!-- For ConfluenceImports-->
+                            com.atlassian.confluence.*;resolution:="optional",
+                            <!-- For BambooImports-->
+                            com.atlassian.bamboo.*;resolution:="optional",
+                            <!-- For BitbucketImports -->
+                            com.atlassian.bitbucket.*;resolution:="optional",
+                            <!-- For FecruImports -->
+                            com.atlassian.fisheye.*;resolution:="optional",
+                            <!-- For CrowdImports -->
+                            com.atlassian.crowd.*;resolution:="optional",
+                            <!-- All the rest should be common to all products -->
+                            *
+                        </Import-Package>
+                    </instructions>
+
+                    <bundledArtifacts>
+                        <bundledArtifact>
+                            <groupId>com.atlassian.plugin</groupId>
+                            <artifactId>atlassian-spring-scanner-runtime</artifactId>
+                            <version>${scanner.version}</version>
+                        </bundledArtifact>
+                        <bundledArtifact>
+                            <groupId>com.atlassian.plugin</groupId>
+                            <artifactId>atlassian-spring-scanner-annotation</artifactId>
+                            <version>${scanner.version}</version>
+                        </bundledArtifact>
+                        <bundledArtifact>
+                            <groupId>com.atlassian.plugin</groupId>
+                            <artifactId>atlassian-spring-scanner-maven-test-service-exporting-plugin</artifactId>
+                            <version>${scanner.version}</version>
+                        </bundledArtifact>
+                    </bundledArtifacts>
+
+                    <products>
+                        <!-- Bamboo, Bitbucket Confluence and Crowd are on Spring Scanner 2.2.x -->
+                        <!-- Fecru is on 1.2.x and will probably jump to 2.2.x or later -->
+
+                        <!-- Crowd won't start with Spring Scanner 3.x, because the crowd-monitoring-plugin (a required
+                            plugin) has a Spring Scanner version constraint of [2.2,3) -->
+                        <product>
+                            <id>jira</id>
+                            <version>${jira.version}</version>
+                            <httpPort>${product.httpPort}</httpPort>
+                            <contextPath>${product.contextPath}</contextPath>
+                        </product>
+                        <product>
+                            <id>refapp</id>
+                            <version>${refapp.version}</version>
+                            <httpPort>${product.httpPort}</httpPort>
+                            <contextPath>${product.contextPath}</contextPath>
+                        </product>
+                    </products>
+
+                    <testGroups>
+                        <testGroup>
+                            <id>jira</id>
+                            <productIds>
+                                <productId>jira</productId>
+                            </productIds>
+                            <includes>
+                                <include>it/allproducts/*.java</include>
+                                <include>it/perproduct/TestInJira.java</include>
+                            </includes>
+                        </testGroup>
+                        <testGroup>
+                            <id>refapp</id>
+                            <productIds>
+                                <productId>refapp</productId>
+                            </productIds>
+                            <includes>
+                                <include>it/allproducts/*.java</include>
+                                <include>it/perproduct/TestInRefapp.java</include>
+                            </includes>
+                        </testGroup>
+                    </testGroups>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>postgres84</id>
+            <properties>
+                <postgres.wait.condition>database system is ready to accept connections</postgres.wait.condition>
+            </properties>
+        </profile>
+        <profile>
+            <id>postgres95</id>
+            <properties>
+                <postgres.wait.condition>PostgreSQL init process complete; ready for start up.</postgres.wait.condition>
+            </properties>
+        </profile>
+    </profiles>
+</project>

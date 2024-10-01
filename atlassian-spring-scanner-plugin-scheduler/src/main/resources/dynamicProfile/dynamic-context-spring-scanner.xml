@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:atlassian-scanner="http://www.atlassian.com/schema/atlassian-scanner/2"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://www.atlassian.com/schema/atlassian-scanner/2
+       http://www.atlassian.com/schema/atlassian-scanner/2/atlassian-scanner.xsd">
+
+    <!-- This file is loaded later (long after plugin startup) by DynamicContextManager, when manually triggered,
+         and loads all the components that have @Profile("dynamic"). -->
+
+    <atlassian-scanner:scan-indexes profile="dynamic" />
+</beans>

@@ -190,7 +190,7 @@
                     <!-- See here for an explanation of default instructions: -->
                     <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
                     <instructions>
-                        <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
+<!--                        <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>-->
                         <!-- Add package to export here -->
                         <Export-Package>server.plugin.sample.api,</Export-Package>
                         <!-- Add package import here -->
