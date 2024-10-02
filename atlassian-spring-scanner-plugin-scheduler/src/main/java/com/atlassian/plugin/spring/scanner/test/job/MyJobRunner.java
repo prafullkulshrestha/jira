@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Named
 public class MyJobRunner implements JobRunner, LifecycleAware {
     Logger LOG = LoggerFactory.getLogger(MyJobRunner.class);
-    private static final long EVERY_MINUTE = TimeUnit.MINUTES.toMillis(1);
+    //private static final long EVERY_TWO_MINUTES = TimeUnit.MINUTES.toMillis(2);
     private static final JobRunnerKey JOB_RUNNER_KEY = JobRunnerKey.of(MyJobRunner.class.getName());
     private static final JobId JOB_ID = JobId.of(MyJobRunner.class.getName());
     private final SchedulerService scheduler;
@@ -28,7 +28,7 @@ public class MyJobRunner implements JobRunner, LifecycleAware {
     @Nullable
     @Override
     public JobRunnerResponse runJob(JobRunnerRequest jobRunnerRequest) {
-        LOG.info("Running MyJob at *************************************** " + jobRunnerRequest.getStartTime());
+        LOG.info("Running MyJob at -----------------------------------> " + jobRunnerRequest.getStartTime());
         return JobRunnerResponse.success();
     }
 
@@ -37,8 +37,10 @@ public class MyJobRunner implements JobRunner, LifecycleAware {
         LOG.info("Starting...");
         scheduler.registerJobRunner(JOB_RUNNER_KEY, this);
 
-        final JobConfig jobConfig = JobConfig.forJobRunnerKey(JOB_RUNNER_KEY).withRunMode(RunMode.RUN_LOCALLY)
-                .withSchedule(Schedule.forInterval(EVERY_MINUTE, null));
+        String cronExpression = "0/1 * * * * ?";
+        final JobConfig jobConfig = JobConfig.forJobRunnerKey(JOB_RUNNER_KEY).withRunMode(RunMode.RUN_ONCE_PER_CLUSTER)
+//                .withSchedule(Schedule.forInterval(EVERY_TWO_MINUTES, null));
+        .withSchedule(Schedule.forCronExpression(cronExpression));
 
         try {
             scheduler.scheduleJob(JOB_ID, jobConfig);
